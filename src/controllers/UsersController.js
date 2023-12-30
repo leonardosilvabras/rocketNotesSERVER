@@ -1,3 +1,5 @@
+const AppError = require('../utils/AppError.js');
+
 class UsersController {
   create(req, res) {
     const { name, email, password } = req.body;
