@@ -5,12 +5,12 @@ const express = require("express"),
   app = express(),
   PORT = 3333,
   AppError = require("./utils/AppError.js"),
-  database = require("./database/sqlite");
+  migrationsRUN = require("./database/sqlite/migrations");
+
+migrationsRUN();
 
 app.use(express.json());
 app.use(routes);
-
-database();
 
 app.use((e, req, res, next) => {
   console.error(e);
