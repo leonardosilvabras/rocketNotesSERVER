@@ -1,12 +1,20 @@
-const AppError = require("../utils/AppError.js");
+const AppError = require("../utils/AppError.js"),
+  sqliteConnection = require("../database/sqlite");
 
 class UsersController {
-  create(req, res) {
-    const { name, email, password } = req.body;
+  async create(req, res) {
+    const { name, email, password } = req.body,
+      database = await sqliteConnection(),
+      checkUserExists = await database.get(
+        "SELECT * FROM users WHERE email = (?)",
+        [email]
+      );
 
-    if (!name) throw new AppError("Name is required", 400);
+      if(checkUserExists) {
+        throw new AppError("Esse email ja esta em uso", 400);
+      }
 
-    res.status(201).json({ name, email, password });
+      return res.status(201).json()
   }
 }
 
